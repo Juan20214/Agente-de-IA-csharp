@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,13 +12,13 @@ namespace AgenteIA
     {
         private List<string> memoria = new List<string>();
 
-        
+
+        private string ruta = "memoria.txt";
+
         public string Procesar(string palabra)
         {
             palabra = palabra.ToLower();
 
-            memoria.Add(palabra);
-            
             string respuesta;
 
             if (palabra == "hola")
@@ -55,7 +56,10 @@ namespace AgenteIA
            
             }
 
-            memoria.Add("Agente:" + respuesta);
+            File.AppendAllText(ruta, "Usuario: " + palabra + Environment.NewLine);
+            File.AppendAllText(ruta, "Agente: " + respuesta + Environment.NewLine);
+         
+
 
             return respuesta;
 
@@ -66,9 +70,18 @@ namespace AgenteIA
         {
             Console.WriteLine("\n--- HISTORIAL ---");
 
-            foreach (var item in memoria)
+            if (File.Exists(ruta))
             {
-                Console.WriteLine(item);
+                string[] lineas = File.ReadAllLines(ruta);
+
+                foreach (var linea in lineas)
+                {
+                    Console.WriteLine(linea);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No hay historial guardado.");
             }
 
             Console.WriteLine("-----------------\n");

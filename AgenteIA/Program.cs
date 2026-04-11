@@ -18,6 +18,21 @@ class Program
                 continue;
             }
 
+            if (input.ToLower() == "borrar memoria")
+            {
+                if (File.Exists("memoria.txt"))
+                {
+                    File.Delete("memoria.txt");
+                    Console.WriteLine("Memoria borrada");
+                }
+                else
+                {
+                    Console.WriteLine("No hay memoria para borrar");
+                }
+
+                continue;
+            }
+
             string respuesta = agente.Procesar(input);
 
             if (respuesta == "salir")
