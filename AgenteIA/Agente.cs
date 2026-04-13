@@ -4,13 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Text.Json;
 
 namespace AgenteIA
 {
     public class Agente 
     {
-        private List<string> memoria = new List<string>();
+        private List<Mensaje> memoria = new List<Mensaje>();
 
 
         private string ruta = "memoria.txt";
