@@ -13,7 +13,7 @@ namespace AgenteIA
         private List<Mensaje> memoria = new List<Mensaje>();
 
 
-        private string ruta = "memoria.txt";
+        private string ruta = "memoria.json";
 
         public string Procesar(string palabra)
         {
@@ -56,11 +56,23 @@ namespace AgenteIA
            
             }
 
-            File.AppendAllText(ruta, "Usuario: " + palabra + Environment.NewLine);
-            File.AppendAllText(ruta, "Agente: " + respuesta + Environment.NewLine);
-         
+            if (File.Exists(ruta))
+            {
+                string json = File.ReadAllText(ruta);
+                memoria = JsonSerializer.Deserialize<List<Mensaje>>(json) ?? new List<Mensaje>();
+            }
 
+            memoria.Add(new Mensaje
+            {
+                Usuario = palabra,
+                Agente = respuesta
+            });
 
+            string nuevoJson = JsonSerializer.Serialize(memoria, new JsonSerializerOptions { WriteIndented = true });
+
+            File.WriteAllText(ruta, nuevoJson);
+
+          
             return respuesta;
 
 
@@ -72,20 +84,22 @@ namespace AgenteIA
 
             if (File.Exists(ruta))
             {
-                string[] lineas = File.ReadAllLines(ruta);
+                string json = File.ReadAllText(ruta);
+                var lista = JsonSerializer.Deserialize<List<Mensaje>>(json);
 
-                foreach (var linea in lineas)
+                foreach (var item in lista)
                 {
-                    Console.WriteLine(linea);
+                    Console.WriteLine($"Usuario: {item.Usuario}");
+                    Console.WriteLine($"Agente: {item.Agente}");
                 }
             }
             else
             {
-                Console.WriteLine("No hay historial guardado.");
+                Console.WriteLine("No hay historial.");
             }
 
             Console.WriteLine("-----------------\n");
-        }
 
+        }
     }
 }
